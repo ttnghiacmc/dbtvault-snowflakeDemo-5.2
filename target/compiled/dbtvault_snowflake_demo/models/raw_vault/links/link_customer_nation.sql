@@ -16,6 +16,9 @@ WITH row_rank_1 AS (
 records_to_insert AS (
     SELECT a."LINK_CUSTOMER_NATION_PK", a."CUSTOMER_PK", a."NATION_PK", a."LOAD_DATE", a."RECORD_SOURCE"
     FROM row_rank_1 AS a
+    LEFT JOIN DV_PROTOTYPE_DB.dbt_ttnghiacmc.link_customer_nation AS d
+    ON a."LINK_CUSTOMER_NATION_PK" = d."LINK_CUSTOMER_NATION_PK"
+    WHERE d."LINK_CUSTOMER_NATION_PK" IS NULL
 )
 
 SELECT * FROM records_to_insert

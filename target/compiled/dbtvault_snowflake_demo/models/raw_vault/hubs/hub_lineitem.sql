@@ -14,6 +14,9 @@ WITH row_rank_1 AS (
 records_to_insert AS (
     SELECT a."LINEITEM_PK", a."LINENUMBER", a."ORDERKEY", a."LOAD_DATE", a."RECORD_SOURCE"
     FROM row_rank_1 AS a
+    LEFT JOIN DV_PROTOTYPE_DB.dbt_ttnghiacmc.hub_lineitem AS d
+    ON a."LINEITEM_PK" = d."LINEITEM_PK"
+    WHERE d."LINEITEM_PK" IS NULL
 )
 
 SELECT * FROM records_to_insert

@@ -10,7 +10,9 @@ WITH stage AS (
 records_to_insert AS (
     SELECT DISTINCT stg."TRANSACTION_PK", stg."CUSTOMER_PK", stg."ORDER_PK", stg."TRANSACTION_NUMBER", stg."TRANSACTION_DATE", stg."TYPE", stg."AMOUNT", stg."EFFECTIVE_FROM", stg."LOAD_DATE", stg."RECORD_SOURCE"
     FROM stage AS stg
-    
+    LEFT JOIN DV_PROTOTYPE_DB.dbt_ttnghiacmc.t_link_transactions AS tgt
+    ON stg."TRANSACTION_PK" = tgt."TRANSACTION_PK"
+    WHERE tgt."TRANSACTION_PK" IS NULL
 )
 
 SELECT * FROM records_to_insert

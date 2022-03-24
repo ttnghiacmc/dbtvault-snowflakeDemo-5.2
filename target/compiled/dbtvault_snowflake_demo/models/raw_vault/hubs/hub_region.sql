@@ -42,6 +42,9 @@ row_rank_union AS (
 records_to_insert AS (
     SELECT a."REGION_PK", a."REGION_KEY", a."LOAD_DATE", a."RECORD_SOURCE"
     FROM row_rank_union AS a
+    LEFT JOIN DV_PROTOTYPE_DB.dbt_ttnghiacmc.hub_region AS d
+    ON a."REGION_PK" = d."REGION_PK"
+    WHERE d."REGION_PK" IS NULL
 )
 
 SELECT * FROM records_to_insert
