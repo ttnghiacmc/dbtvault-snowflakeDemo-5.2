@@ -14,9 +14,6 @@ WITH row_rank_1 AS (
 records_to_insert AS (
     SELECT a."CUSTOMER_PK", a."CUSTOMERKEY", a."LOAD_DATE", a."RECORD_SOURCE"
     FROM row_rank_1 AS a
-    LEFT JOIN DV_PROTOTYPE_DB.dbt_ttnghiacmc.hub_customer AS d
-    ON a."CUSTOMER_PK" = d."CUSTOMER_PK"
-    WHERE d."CUSTOMER_PK" IS NULL
 )
 
 SELECT * FROM records_to_insert

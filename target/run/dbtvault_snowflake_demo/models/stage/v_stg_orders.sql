@@ -311,6 +311,6 @@ SELECT * FROM columns_to_select
 )
 
 SELECT *,
-       TO_DATE('1992-01-09') AS LOAD_DATE
+       TO_DATE('CURRENT_TIMESTAMP()') AS LOAD_DATE
 FROM staging
   );

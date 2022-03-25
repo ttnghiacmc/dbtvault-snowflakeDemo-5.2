@@ -6,31 +6,9 @@ WITH source_data AS (
     WHERE a."SUPPLIER_PK" IS NOT NULL
 ),
 
-latest_records AS (
-    SELECT a."SUPPLIER_PK", a."SUPPLIER_NATION_HASHDIFF", a."LOAD_DATE"
-    FROM (
-        SELECT current_records."SUPPLIER_PK", current_records."SUPPLIER_NATION_HASHDIFF", current_records."LOAD_DATE",
-            RANK() OVER (
-                PARTITION BY current_records."SUPPLIER_PK"
-                ORDER BY current_records."LOAD_DATE" DESC
-            ) AS rank
-        FROM DV_PROTOTYPE_DB.dbt_ttnghiacmc.sat_inv_supp_nation_details AS current_records
-            JOIN (
-                SELECT DISTINCT source_data."SUPPLIER_PK"
-                FROM source_data
-            ) AS source_records
-                ON current_records."SUPPLIER_PK" = source_records."SUPPLIER_PK"
-    ) AS a
-    WHERE a.rank = 1
-),
-
 records_to_insert AS (
     SELECT DISTINCT stage."SUPPLIER_PK", stage."SUPPLIER_NATION_HASHDIFF", stage."SUPPLIER_NATION_NAME", stage."SUPPLIER_NATION_COMMENT", stage.EFFECTIVE_FROM, stage."LOAD_DATE", stage."RECORD_SOURCE"
     FROM source_data AS stage
-        LEFT JOIN latest_records
-            ON latest_records."SUPPLIER_PK" = stage."SUPPLIER_PK"
-            WHERE latest_records."SUPPLIER_NATION_HASHDIFF" != stage."SUPPLIER_NATION_HASHDIFF"
-                OR latest_records."SUPPLIER_NATION_HASHDIFF" IS NULL
 )
 
 SELECT * FROM records_to_insert

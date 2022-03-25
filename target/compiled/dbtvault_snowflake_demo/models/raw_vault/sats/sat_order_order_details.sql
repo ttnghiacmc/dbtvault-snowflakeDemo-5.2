@@ -6,31 +6,9 @@ WITH source_data AS (
     WHERE a."ORDER_PK" IS NOT NULL
 ),
 
-latest_records AS (
-    SELECT a."ORDER_PK", a."ORDER_HASHDIFF", a."LOAD_DATE"
-    FROM (
-        SELECT current_records."ORDER_PK", current_records."ORDER_HASHDIFF", current_records."LOAD_DATE",
-            RANK() OVER (
-                PARTITION BY current_records."ORDER_PK"
-                ORDER BY current_records."LOAD_DATE" DESC
-            ) AS rank
-        FROM DV_PROTOTYPE_DB.dbt_ttnghiacmc.sat_order_order_details AS current_records
-            JOIN (
-                SELECT DISTINCT source_data."ORDER_PK"
-                FROM source_data
-            ) AS source_records
-                ON current_records."ORDER_PK" = source_records."ORDER_PK"
-    ) AS a
-    WHERE a.rank = 1
-),
-
 records_to_insert AS (
     SELECT DISTINCT stage."ORDER_PK", stage."ORDER_HASHDIFF", stage."ORDERSTATUS", stage."TOTALPRICE", stage."ORDERDATE", stage."ORDERPRIORITY", stage."CLERK", stage."SHIPPRIORITY", stage."ORDER_COMMENT", stage.EFFECTIVE_FROM, stage."LOAD_DATE", stage."RECORD_SOURCE"
     FROM source_data AS stage
-        LEFT JOIN latest_records
-            ON latest_records."ORDER_PK" = stage."ORDER_PK"
-            WHERE latest_records."ORDER_HASHDIFF" != stage."ORDER_HASHDIFF"
-                OR latest_records."ORDER_HASHDIFF" IS NULL
 )
 
 SELECT * FROM records_to_insert

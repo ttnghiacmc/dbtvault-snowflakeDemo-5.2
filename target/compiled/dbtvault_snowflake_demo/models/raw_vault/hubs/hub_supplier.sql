@@ -42,9 +42,6 @@ row_rank_union AS (
 records_to_insert AS (
     SELECT a."SUPPLIER_PK", a."SUPPLIERKEY", a."LOAD_DATE", a."RECORD_SOURCE"
     FROM row_rank_union AS a
-    LEFT JOIN DV_PROTOTYPE_DB.dbt_ttnghiacmc.hub_supplier AS d
-    ON a."SUPPLIER_PK" = d."SUPPLIER_PK"
-    WHERE d."SUPPLIER_PK" IS NULL
 )
 
 SELECT * FROM records_to_insert

@@ -6,31 +6,9 @@ WITH source_data AS (
     WHERE a."LINEITEM_PK" IS NOT NULL
 ),
 
-latest_records AS (
-    SELECT a."LINEITEM_PK", a."LINEITEM_HASHDIFF", a."LOAD_DATE"
-    FROM (
-        SELECT current_records."LINEITEM_PK", current_records."LINEITEM_HASHDIFF", current_records."LOAD_DATE",
-            RANK() OVER (
-                PARTITION BY current_records."LINEITEM_PK"
-                ORDER BY current_records."LOAD_DATE" DESC
-            ) AS rank
-        FROM DV_PROTOTYPE_DB.dbt_ttnghiacmc.sat_order_lineitem_details AS current_records
-            JOIN (
-                SELECT DISTINCT source_data."LINEITEM_PK"
-                FROM source_data
-            ) AS source_records
-                ON current_records."LINEITEM_PK" = source_records."LINEITEM_PK"
-    ) AS a
-    WHERE a.rank = 1
-),
-
 records_to_insert AS (
     SELECT DISTINCT stage."LINEITEM_PK", stage."LINEITEM_HASHDIFF", stage."COMMITDATE", stage."DISCOUNT", stage."EXTENDEDPRICE", stage."LINE_COMMENT", stage."QUANTITY", stage."RECEIPTDATE", stage."RETURNFLAG", stage."SHIPDATE", stage."SHIPINSTRUCT", stage."SHIPMODE", stage."TAX", stage.EFFECTIVE_FROM, stage."LOAD_DATE", stage."RECORD_SOURCE"
     FROM source_data AS stage
-        LEFT JOIN latest_records
-            ON latest_records."LINEITEM_PK" = stage."LINEITEM_PK"
-            WHERE latest_records."LINEITEM_HASHDIFF" != stage."LINEITEM_HASHDIFF"
-                OR latest_records."LINEITEM_HASHDIFF" IS NULL
 )
 
 SELECT * FROM records_to_insert

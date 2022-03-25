@@ -17,9 +17,6 @@ WITH row_rank_1 AS (
 records_to_insert AS (
     SELECT a."INVENTORY_ALLOCATION_PK", a."PART_PK", a."SUPPLIER_PK", a."LINEITEM_PK", a."LOAD_DATE", a."RECORD_SOURCE"
     FROM row_rank_1 AS a
-    LEFT JOIN DV_PROTOTYPE_DB.dbt_ttnghiacmc.link_inventory_allocation AS d
-    ON a."INVENTORY_ALLOCATION_PK" = d."INVENTORY_ALLOCATION_PK"
-    WHERE d."INVENTORY_ALLOCATION_PK" IS NULL
 )
 
 SELECT * FROM records_to_insert

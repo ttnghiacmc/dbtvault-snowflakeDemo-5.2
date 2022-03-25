@@ -42,9 +42,6 @@ row_rank_union AS (
 records_to_insert AS (
     SELECT a."PART_PK", a."PARTKEY", a."LOAD_DATE", a."RECORD_SOURCE"
     FROM row_rank_union AS a
-    LEFT JOIN DV_PROTOTYPE_DB.dbt_ttnghiacmc.hub_part AS d
-    ON a."PART_PK" = d."PART_PK"
-    WHERE d."PART_PK" IS NULL
 )
 
 SELECT * FROM records_to_insert

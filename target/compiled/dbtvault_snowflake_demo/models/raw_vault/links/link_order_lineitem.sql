@@ -16,9 +16,6 @@ WITH row_rank_1 AS (
 records_to_insert AS (
     SELECT a."LINK_LINEITEM_ORDER_PK", a."ORDER_PK", a."LINEITEM_PK", a."LOAD_DATE", a."RECORD_SOURCE"
     FROM row_rank_1 AS a
-    LEFT JOIN DV_PROTOTYPE_DB.dbt_ttnghiacmc.link_order_lineitem AS d
-    ON a."LINK_LINEITEM_ORDER_PK" = d."LINK_LINEITEM_ORDER_PK"
-    WHERE d."LINK_LINEITEM_ORDER_PK" IS NULL
 )
 
 SELECT * FROM records_to_insert

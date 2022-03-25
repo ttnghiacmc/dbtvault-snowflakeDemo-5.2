@@ -6,31 +6,9 @@ WITH source_data AS (
     WHERE a."PART_PK" IS NOT NULL
 ),
 
-latest_records AS (
-    SELECT a."PART_PK", a."PART_HASHDIFF", a."LOAD_DATE"
-    FROM (
-        SELECT current_records."PART_PK", current_records."PART_HASHDIFF", current_records."LOAD_DATE",
-            RANK() OVER (
-                PARTITION BY current_records."PART_PK"
-                ORDER BY current_records."LOAD_DATE" DESC
-            ) AS rank
-        FROM DV_PROTOTYPE_DB.dbt_ttnghiacmc.sat_inv_part_details AS current_records
-            JOIN (
-                SELECT DISTINCT source_data."PART_PK"
-                FROM source_data
-            ) AS source_records
-                ON current_records."PART_PK" = source_records."PART_PK"
-    ) AS a
-    WHERE a.rank = 1
-),
-
 records_to_insert AS (
     SELECT DISTINCT stage."PART_PK", stage."PART_HASHDIFF", stage."PART_NAME", stage."PART_MFGR", stage."PART_BRAND", stage."PART_TYPE", stage."PART_SIZE", stage."PART_CONTAINER", stage."PART_RETAILPRICE", stage."PART_COMMENT", stage.EFFECTIVE_FROM, stage."LOAD_DATE", stage."RECORD_SOURCE"
     FROM source_data AS stage
-        LEFT JOIN latest_records
-            ON latest_records."PART_PK" = stage."PART_PK"
-            WHERE latest_records."PART_HASHDIFF" != stage."PART_HASHDIFF"
-                OR latest_records."PART_HASHDIFF" IS NULL
 )
 
 SELECT * FROM records_to_insert

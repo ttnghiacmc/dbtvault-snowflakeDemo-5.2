@@ -6,31 +6,9 @@ WITH source_data AS (
     WHERE a."INVENTORY_PK" IS NOT NULL
 ),
 
-latest_records AS (
-    SELECT a."INVENTORY_PK", a."INVENTORY_HASHDIFF", a."LOAD_DATE"
-    FROM (
-        SELECT current_records."INVENTORY_PK", current_records."INVENTORY_HASHDIFF", current_records."LOAD_DATE",
-            RANK() OVER (
-                PARTITION BY current_records."INVENTORY_PK"
-                ORDER BY current_records."LOAD_DATE" DESC
-            ) AS rank
-        FROM DV_PROTOTYPE_DB.dbt_ttnghiacmc.sat_inv_inventory_details AS current_records
-            JOIN (
-                SELECT DISTINCT source_data."INVENTORY_PK"
-                FROM source_data
-            ) AS source_records
-                ON current_records."INVENTORY_PK" = source_records."INVENTORY_PK"
-    ) AS a
-    WHERE a.rank = 1
-),
-
 records_to_insert AS (
     SELECT DISTINCT stage."INVENTORY_PK", stage."INVENTORY_HASHDIFF", stage."AVAILQTY", stage."SUPPLYCOST", stage."PART_SUPPLY_COMMENT", stage.EFFECTIVE_FROM, stage."LOAD_DATE", stage."RECORD_SOURCE"
     FROM source_data AS stage
-        LEFT JOIN latest_records
-            ON latest_records."INVENTORY_PK" = stage."INVENTORY_PK"
-            WHERE latest_records."INVENTORY_HASHDIFF" != stage."INVENTORY_HASHDIFF"
-                OR latest_records."INVENTORY_HASHDIFF" IS NULL
 )
 
 SELECT * FROM records_to_insert

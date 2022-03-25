@@ -14,9 +14,6 @@ WITH row_rank_1 AS (
 records_to_insert AS (
     SELECT a."ORDER_PK", a."ORDERKEY", a."LOAD_DATE", a."RECORD_SOURCE"
     FROM row_rank_1 AS a
-    LEFT JOIN DV_PROTOTYPE_DB.dbt_ttnghiacmc.hub_order AS d
-    ON a."ORDER_PK" = d."ORDER_PK"
-    WHERE d."ORDER_PK" IS NULL
 )
 
 SELECT * FROM records_to_insert
