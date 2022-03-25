@@ -15706,3 +15706,15 @@ The `data-paths` config has been renamed to `seed-paths`. Please update your
 2022-03-25 02:33:58.909483 (Thread-115): handling status request
 2022-03-25 02:33:58.909870 (Thread-115): 02:33:58  Sending event: {'category': 'dbt', 'action': 'rpc_request', 'label': 'deb1da4e-d3ff-4ec7-a539-d40061a55b60', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f29e04619a0>]}
 2022-03-25 02:33:58.910327 (Thread-115): sending response (<Response 1241 bytes [200 OK]>) to 10.0.12.113
+2022-03-25 02:34:01.228562 (Thread-116): 02:34:01  Partial parsing enabled: 0 files deleted, 0 files added, 0 files changed.
+2022-03-25 02:34:01.228923 (Thread-116): 02:34:01  Partial parsing enabled, no changes found, skipping parsing
+2022-03-25 02:34:01.237968 (Thread-116): 02:34:01  Sending event: {'category': 'dbt', 'action': 'load_project', 'label': 'deb1da4e-d3ff-4ec7-a539-d40061a55b60', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f29e00cfa00>]}
+2022-03-25 02:34:01.802455 (Thread-117): handling status request
+2022-03-25 02:34:01.802843 (Thread-117): 02:34:01  Sending event: {'category': 'dbt', 'action': 'rpc_request', 'label': 'deb1da4e-d3ff-4ec7-a539-d40061a55b60', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f29e017b670>]}
+2022-03-25 02:34:01.803335 (Thread-117): sending response (<Response 1244 bytes [200 OK]>) to 10.0.12.113
+2022-03-25 02:34:01.825752 (Thread-118): handling status request
+2022-03-25 02:34:01.826072 (Thread-118): 02:34:01  Sending event: {'category': 'dbt', 'action': 'rpc_request', 'label': 'deb1da4e-d3ff-4ec7-a539-d40061a55b60', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f29e017b2e0>]}
+2022-03-25 02:34:01.832609 (Thread-118): sending response (<Response 1244 bytes [200 OK]>) to 10.0.12.113
+2022-03-25 02:34:08.589209 (Thread-119): handling status request
+2022-03-25 02:34:08.589635 (Thread-119): 02:34:08  Sending event: {'category': 'dbt', 'action': 'rpc_request', 'label': 'deb1da4e-d3ff-4ec7-a539-d40061a55b60', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f29e017b100>]}
+2022-03-25 02:34:08.590131 (Thread-119): sending response (<Response 1244 bytes [200 OK]>) to 10.0.12.113
